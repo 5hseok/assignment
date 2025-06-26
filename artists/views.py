@@ -192,3 +192,53 @@ def process_applications(request):
         })
     
     return JsonResponse({'error': '잘못된 요청입니다.'}, status=400)
+
+@login_required
+def download_applications_csv(request):
+    """작가 등록 신청 데이터를 CSV 파일로 다운로드"""
+    if not request.user.is_staff:
+        messages.error(request, '관리자만 접근할 수 있습니다.')
+        return redirect('auth_management:home')
+    
+    # HttpResponse 생성 (CSV 파일 형태)
+    response = HttpResponse(content_type='text/csv; charset=utf-8')
+    response['Content-Disposition'] = f'attachment; filename="artist_applications_{timezone.now().strftime("%Y%m%d_%H%M%S")}.csv"'
+    
+    # BOM 추가 (Excel에서 한글이 제대로 보이도록)
+    response.write('\ufeff')
+    
+    writer = csv.writer(response)
+    
+    # CSV 헤더 작성
+    writer.writerow([
+        'ID',
+        '이름',
+        '성별', 
+        '생년월일',
+        '이메일',
+        '연락처',
+        '신청일시',
+        '상태',
+        '처리일시',
+        '신청자 사용자명'
+    ])
+    
+    # 모든 신청 데이터 가져오기 (최신순 정렬)
+    applications = ArtistApplication.objects.select_related('user').order_by('-applied_at')
+    
+    # 데이터 행 작성
+    for application in applications:
+        writer.writerow([
+            application.id,
+            application.name,
+            application.gender,
+            application.birthday.strftime('%Y-%m-%d'),
+            application.email,
+            application.phone_number,
+            application.applied_at.strftime('%Y-%m-%d %H:%M:%S'),
+            application.get_status_display(),
+            application.processed_at.strftime('%Y-%m-%d %H:%M:%S') if application.processed_at else '',
+            application.user.username
+        ])
+    
+    return response
