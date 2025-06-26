@@ -1,0 +1,266 @@
+/* 기본 스타일 */
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f8f9fa;
+}
+
+/* 네비게이션 */
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+/* 카드 스타일 */
+.card {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: none;
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* 히어로 섹션 */
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* 폼 스타일 */
+.form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+.btn-primary {
+    background-color: #667eea;
+    border-color: #667eea;
+}
+
+.btn-primary:hover {
+    background-color: #5a6fd8;
+    border-color: #5a6fd8;
+}
+
+/* 테이블 스타일 */
+.table th {
+    background-color: #f8f9fa;
+    border-top: none;
+}
+
+/* 배지 스타일 */
+.badge {
+    font-size: 0.8rem;
+}
+
+/* 푸터 */
+footer {
+    margin-top: auto;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .btn-group-vertical .btn {
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* 로딩 스피너 */
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+}
+
+/* 메시지 알림 */
+.alert {
+    border-radius: 0.5rem;
+}
+
+/* 커스텀 체크박스 */
+.form-check-input:checked {
+    background-color: #667eea;
+    border-color: #667eea;
+}
+
+/* 페이지네이션 */
+.pagination .page-link {
+    color: #667eea;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #667eea;
+    border-color: #667eea;
+}
+
+/* 드롭다운 메뉴 */
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* 통계 카드 */
+.stats-card {
+    text-align: center;
+    padding: 2rem 1rem;
+}
+
+.stats-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+/* 애니메이션 */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* 다크 모드 지원 */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #1a1a1a;
+        color: #ffffff;
+    }
+    
+    .card {
+        background-color: #2d2d2d;
+        color: #ffffff;
+    }
+    
+    .table {
+        color: #ffffff;
+    }
+    
+    .table th {
+        background-color: #3d3d3d;
+    }
+}
+
+/* 네비게이션 바 사용자명 위치 조정 */
+.navbar-nav .navbar-text {
+    display: flex !important;
+    align-items: center !important;
+    height: 100% !important;
+    margin-bottom: 0 !important;
+    line-height: 1.5 !important;
+}
+
+.navbar-nav .nav-item {
+    display: flex;
+    align-items: center;
+}
+
+/* 전시 등록 페이지 작품 목록 텍스트 자동 개행 */
+.form-check-label {
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+    line-height: 1.4 !important;
+}
+
+/* 체크박스와 라벨을 위한 컨테이너 */
+.form-check {
+    display: flex !important;
+    align-items: flex-start !important;
+    margin-bottom: 0.75rem !important;
+}
+
+.form-check-input {
+    margin-top: 0.25rem !important;
+    margin-right: 0.5rem !important;
+    flex-shrink: 0 !important;
+}
+
+/* 작품 목록 선택 영역 전체 스타일링 */
+.artwork-selection {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    padding: 1rem;
+    background-color: #f8f9fa;
+}
+
+.artwork-item {
+    padding: 0.5rem;
+    border-bottom: 1px solid #e9ecef;
+    margin-bottom: 0.5rem;
+}
+
+.artwork-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.artwork-title {
+    font-weight: bold;
+    color: #495057;
+    word-break: break-word;
+}
+
+.artwork-details {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-top: 0.25rem;
+}
+
+/* 페이지 전체 높이 및 푸터 위치 조정 */
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+main.container {
+    flex: 1;
+    min-height: calc(100vh - 200px); /* 네비게이션과 푸터 높이 제외 */
+}
+
+/* 콘텐츠가 적을 때 추가 여백 */
+.content-wrapper {
+    min-height: 60vh;
+    padding-bottom: 3rem;
+}
+
+/* 목록 페이지 특별 스타일링 */
+.list-page {
+    min-height: 70vh;
+}
+
+/* 카드 그리드 레이아웃 개선 */
+.card-grid {
+    min-height: 50vh;
+}
+
+/* 검색 결과가 없을 때 */
+.no-results {
+    min-height: 40vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 푸터를 항상 하단에 고정 */
+footer {
+    margin-top: auto !important;
+    flex-shrink: 0;
+}
