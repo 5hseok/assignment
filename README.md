@@ -191,13 +191,13 @@ coverage html
 
 ### 로컬 개발환경
 - Python 3.8+
-- Django 4.x
+- Django 4.7.0
 - SQLite
 
-### 배포 환경 (선택)
-- **호스팅**: [배포된 경우 URL 기재]
-- **데이터베이스**: MySQL
-- **정적 파일**: [S3/CloudFront 등 사용 시 기재]
+### 배포 환경
+- **호스팅**: http://43.201.115.213       (https도 가능하나, ssl 인증서를 사용하지 않아 보안 연결은 X)
+- **데이터베이스**: SQLite
+- **SECRET_KEY**: Repository에 기재된 key와는 다른 key 사용 
 
 ## 📝 개발 일지
 
