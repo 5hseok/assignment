@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% block title %}작가 통계 - 오픈갤러리{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>작가 통계</h2>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>작가명</th>
+                        <th>성별</th>
+                        <th>이메일</th>
+                        <th>100호 이하 작품 수</th>
+                        <th>전체 작품 수</th>
+                        <th>평균 가격</th>
+                        <th>등록일</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for artist in artists %}
+                        <tr>
+                            <td>{{ artist.name }}</td>
+                            <td>{{ artist.gender }}</td>
+                            <td>{{ artist.email }}</td>
+                            <td>{{ artist.small_artwork_count }}개</td>
+                            <td>{{ artist.artwork_set.count }}개</td>
+                            <td>
+                                {% if artist.avg_price %}
+                                    ₩{{ artist.avg_price|floatformat:0|add:"0"|stringformat:"d" }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>{{ artist.created_at|date:"Y-m-d" }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center">등록된 작가가 없습니다.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>작가별 작품 수 분포</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="artworkCountChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>성별 분포</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="genderChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// 작품 수 분포 차트
+const artworkCountCtx = document.getElementById('artworkCountChart').getContext('2d');
+const artworkCountChart = new Chart(artworkCountCtx, {
+    type: 'bar',
+    data: {
+        labels: [{% for artist in artists %}'{{ artist.name }}'{% if not forloop.last %},{% endif %}{% endfor %}],
+        datasets: [{
+            label: '100호 이하 작품 수',
+            data: [{% for artist in artists %}{{ artist.small_artwork_count }}{% if not forloop.last %},{% endif %}{% endfor %}],
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+// 성별 분포 차트
+const genderCtx = document.getElementById('genderChart').getContext('2d');
+const maleCount = {{ artists|length }} - {{ artists|length }};  // 실제 계산 필요
+const femaleCount = {{ artists|length }};  // 실제 계산 필요
+
+const genderChart = new Chart(genderCtx, {
+    type: 'doughnut',
+    data: {
+        labels: ['남자', '여자'],
+        datasets: [{
+            data: [
+                {% for artist in artists %}{% if artist.gender == '남자' %}1{% else %}0{% endif %}{% if not forloop.last %}+{% endif %}{% endfor %},
+                {% for artist in artists %}{% if artist.gender == '여자' %}1{% else %}0{% endif %}{% if not forloop.last %}+{% endif %}{% endfor %}
+            ],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true
+    }
+});
+</script>
+{% endblock %}

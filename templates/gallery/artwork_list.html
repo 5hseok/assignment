@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}작품 목록 - 오픈갤러리{% endblock %}
+
+{% block content %}
+<div class="content-wrapper list-page">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>작품 목록</h2>
+        <form method="get" class="d-flex">
+            <input type="text" name="search" class="form-control me-2" placeholder="작품 검색..." 
+                   value="{{ search_query }}" style="width: 300px;">
+            <button class="btn btn-outline-primary" type="submit">검색</button>
+        </form>
+    </div>
+
+    {% if search_query %}
+        <div class="alert alert-info">
+            "{{ search_query }}"에 대한 검색 결과
+            <a href="{% url 'artworks:artwork_list' %}" class="btn btn-sm btn-outline-secondary ms-2">전체 보기</a>
+        </div>
+    {% endif %}
+
+    <div class="row card-grid">
+        {% for artwork in page_obj %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ artwork.title }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ artwork.artist.name }}</h6>
+                        <p class="card-text">
+                            <strong>가격:</strong> ₩{{ artwork.formatted_price }}<br>
+                            <strong>호수:</strong> {{ artwork.size_number }}호<br>
+                            <strong>등록일:</strong> {{ artwork.created_at|date:"Y-m-d" }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info text-center no-results">
+                    {% if search_query %}
+                        검색 결과가 없습니다.
+                    {% else %}
+                        등록된 작품이 없습니다.
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- 페이지네이션 -->
+    {% if page_obj.has_other_pages %}
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}">첫 페이지</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">이전</a>
+                    </li>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}">{{ num }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">다음</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}">마지막 페이지</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+</div>
+{% endblock %}

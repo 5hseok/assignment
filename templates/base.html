@@ -1,0 +1,103 @@
+{% load user_extras %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}오픈갤러리{% endblock %}</title>
+    {% load static %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'auth_management:home' %}">오픈갤러리</a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'artists:artist_list' %}">작가 목록</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'artworks:artwork_list' %}">작품 목록</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'exhibitions:exhibition_list' %}">전시 목록</a>
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                        {% if user.is_staff %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown">
+                                    관리자 메뉴
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="{% url 'artists:admin_dashboard' %}">관리자 대시보드</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'artists:admin_applications' %}">작가 신청 관리</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'artists:admin_statistics' %}">작가 통계</a></li>
+                                </ul>
+                            </li>
+                        {% else %}
+                            {% comment %} 관리자가 아닌 일반 사용자만 작가 관련 메뉴 표시 {% endcomment %}
+                            {% if user|is_artist %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'artists:artist_dashboard' %}">작가 대시보드</a>
+                                </li>
+                            {% else %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'artists:apply_artist' %}">작가 등록 신청</a>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                        
+                        <li class="nav-item">
+                            <span class="nav-link text-light">{{ user.username }}님</span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'auth_management:logout' %}">로그아웃</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'auth_management:login' %}">로그인</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'auth_management:signup' %}">회원가입</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mt-4">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2025 오픈갤러리. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

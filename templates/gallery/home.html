@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load user_extras %}
+
+{% block title %}홈 - 오픈갤러리{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="hero-section bg-primary text-white py-5 mb-5 rounded">
+        <div class="container text-center">
+            <h1 class="display-4">오픈갤러리에 오신 것을 환영합니다</h1>
+            <p class="lead">다양한 작가들의 작품을 만나보세요</p>
+            {% if not user.is_authenticated %}
+                <a href="{% url 'auth_management:signup' %}" class="btn btn-light btn-lg me-3">회원가입</a>
+                <a href="{% url 'auth_management:login' %}" class="btn btn-outline-light btn-lg">로그인</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">작가 목록</h5>
+                    <p class="card-text">등록된 작가들을 둘러보세요.</p>
+                    <a href="{% url 'artists:artist_list' %}" class="btn btn-primary">작가 보기</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">작품 목록</h5>
+                    <p class="card-text">다양한 작품들을 감상해보세요.</p>
+                    <a href="{% url 'artworks:artwork_list' %}" class="btn btn-primary">작품 보기</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">전시 목록</h5>
+                    <p class="card-text">진행중인 전시를 확인해보세요.</p>
+                    <a href="{% url 'exhibitions:exhibition_list' %}" class="btn btn-primary">전시 보기</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if user.is_authenticated %}
+        <div class="row mt-5">
+            <div class="col-12">
+                <h3>빠른 메뉴</h3>
+                <div class="row">
+                    {% if user.is_staff %}
+                        <div class="col-md-6 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">관리자 메뉴</h5>
+                                    <p class="card-text">작가 신청 관리 및 통계를 확인하세요.</p>
+                                    <a href="{% url 'artists:admin_dashboard' %}" class="btn btn-success">관리자 대시보드</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        {% comment %} 관리자가 아닌 일반 사용자만 작가 관련 메뉴 표시 {% endcomment %}
+                        {% if user|is_artist %}
+                            <div class="col-md-6 mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">작가 메뉴</h5>
+                                        <p class="card-text">작품과 전시를 관리하세요.</p>
+                                        <a href="{% url 'artists:artist_dashboard' %}" class="btn btn-info">작가 대시보드</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="col-md-6 mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">작가 되기</h5>
+                                        <p class="card-text">작가로 등록하여 작품을 전시하세요.</p>
+                                        <a href="{% url 'artists:apply_artist' %}" class="btn btn-warning">작가 신청</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

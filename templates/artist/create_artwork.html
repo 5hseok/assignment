@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}작품 등록 - 오픈갤러리{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">작품 등록</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" id="artworkForm">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="title" class="form-label">제목 <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="title" name="title" maxlength="64" required>
+                        <div class="form-text">64자 이하로 입력해주세요.</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="price" class="form-label">가격 <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="price" name="price" placeholder="예: 3,000,000" required>
+                        <div class="form-text">0 이상의 숫자를 입력해주세요. 천 단위 콤마가 자동으로 추가됩니다.</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="size_number" class="form-label">호수 <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" id="size_number" name="size_number" 
+                               min="1" max="500" required>
+                        <div class="form-text">1호부터 500호까지 입력 가능합니다.</div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">작품 등록</button>
+                    </div>
+                </form>
+                
+                <div class="text-center mt-3">
+                    <a href="{% url 'artists:artist_dashboard' %}" class="btn btn-outline-secondary">대시보드로 돌아가기</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// 가격 입력시 자동 콤마 추가
+document.getElementById('price').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/,/g, '');
+    if (!isNaN(value) && value !== '') {
+        e.target.value = parseInt(value).toLocaleString();
+    }
+});
+
+document.getElementById('artworkForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const title = document.getElementById('title').value.trim();
+    const price = document.getElementById('price').value.replace(/,/g, '');
+    const sizeNumber = document.getElementById('size_number').value;
+    
+    // 검증
+    if (!title || title.length > 64) {
+        alert('제목을 64자 이하로 입력해주세요.');
+        return;
+    }
+    
+    if (!price || isNaN(price) || parseInt(price) < 0) {
+        alert('가격을 0 이상의 숫자로 입력해주세요.');
+        return;
+    }
+    
+    if (!sizeNumber || parseInt(sizeNumber) < 1 || parseInt(sizeNumber) > 500) {
+        alert('호수를 1부터 500 사이의 숫자로 입력해주세요.');
+        return;
+    }
+    
+    // 모든 검증 통과시 폼 제출
+    this.submit();
+});
+</script>
+{% endblock %}

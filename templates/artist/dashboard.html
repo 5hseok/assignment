@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}작가 대시보드 - 오픈갤러리{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">내 정보</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>이름:</strong> {{ artist.name }}</p>
+                <p><strong>성별:</strong> {{ artist.gender }}</p>
+                <p><strong>생년월일:</strong> {{ artist.birthday }}</p>
+                <p><strong>이메일:</strong> {{ artist.email }}</p>
+                <p><strong>연락처:</strong> {{ artist.phone_number }}</p>
+                <p><strong>등록일:</strong> {{ artist.created_at|date:"Y-m-d" }}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3>내 작품 목록</h3>
+            <div>
+                <a href="{% url 'artworks:create_artwork' %}" class="btn btn-primary">작품 등록</a>
+                <a href="{% url 'exhibitions:create_exhibition' %}" class="btn btn-success">전시 등록</a>
+            </div>
+        </div>
+        
+        {% if artworks %}
+            <div class="row">
+                {% for artwork in artworks %}
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title">{{ artwork.title }}</h6>
+                                <p class="card-text">
+                                    <strong>가격:</strong> ₩{{ artwork.formatted_price }}<br>
+                                    <strong>호수:</strong> {{ artwork.size_number }}호<br>
+                                    <strong>등록일:</strong> {{ artwork.created_at|date:"Y-m-d" }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                아직 등록된 작품이 없습니다. 첫 작품을 등록해보세요!
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

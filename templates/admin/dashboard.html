@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}관리자 대시보드 - 오픈갤러리{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">관리자 대시보드</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">작가 등록 신청 관리</h5>
+                <p class="card-text">작가 등록 신청 내역을 확인하고 승인/반려 처리를 할 수 있습니다.</p>
+                <a href="{% url 'artists:admin_applications' %}" class="btn btn-primary">신청 내역 관리</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">작가 통계</h5>
+                <p class="card-text">등록된 작가들의 작품 통계와 분석 정보를 확인할 수 있습니다.</p>
+                <a href="{% url 'artists:admin_statistics' %}" class="btn btn-success">통계 보기</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">전체 작가 수</h5>
+                <h2 class="text-primary">{{ total_artists }}명</h2>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">전체 작품 수</h5>
+                <h2 class="text-success">{{ total_artworks }}개</h2>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">대기중인 신청</h5>
+                <h2 class="text-warning">{{ pending_applications }}건</h2>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
