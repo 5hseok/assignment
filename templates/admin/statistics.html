@@ -3,72 +3,78 @@
 {% block title %}작가 통계 - 오픈갤러리{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>작가 통계</h2>
-</div>
-
-<div class="card">
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>작가명</th>
-                        <th>성별</th>
-                        <th>이메일</th>
-                        <th>100호 이하 작품 수</th>
-                        <th>전체 작품 수</th>
-                        <th>평균 가격</th>
-                        <th>등록일</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for artist in artists %}
-                        <tr>
-                            <td>{{ artist.name }}</td>
-                            <td>{{ artist.gender }}</td>
-                            <td>{{ artist.email }}</td>
-                            <td>{{ artist.small_artwork_count }}개</td>
-                            <td>{{ artist.artwork_set.count }}개</td>
-                            <td>
-                                {% if artist.avg_price %}
-                                    ₩{{ artist.avg_price|floatformat:0|add:"0"|stringformat:"d" }}
-                                {% else %}
-                                    -
-                                {% endif %}
-                            </td>
-                            <td>{{ artist.created_at|date:"Y-m-d" }}</td>
-                        </tr>
-                    {% empty %}
-                        <tr>
-                            <td colspan="7" class="text-center">등록된 작가가 없습니다.</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>작가 통계</h2>
     </div>
-</div>
 
-<div class="row mt-4">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h5>작가별 작품 수 분포</h5>
-            </div>
-            <div class="card-body">
-                <canvas id="artworkCountChart" width="400" height="200"></canvas>
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>작가명</th>
+                            <th>성별</th>
+                            <th>이메일</th>
+                            <th>100호 이하 작품 수</th>
+                            <th>전체 작품 수</th>
+                            <th>평균 가격</th>
+                            <th>등록일</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for artist in artists %}
+                            <tr>
+                                <td>{{ artist.name }}</td>
+                                <td>{{ artist.gender }}</td>
+                                <td>{{ artist.email }}</td>
+                                <td>{{ artist.small_artwork_count }}개</td>
+                                <td>{{ artist.artwork_set.count }}개</td>
+                                <td>
+                                    {% if artist.avg_price %}
+                                        ₩{{ artist.avg_price|floatformat:0|add:"0"|stringformat:"d" }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>{{ artist.created_at|date:"Y-m-d" }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="7" class="text-center">등록된 작가가 없습니다.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
-    
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h5>성별 분포</h5>
+
+    <div class="row mb-5">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>작가별 작품 수 분포</h5>
+                </div>
+                <div class="card-body">
+                    <div style="height: 400px;">
+                        <canvas id="artworkCountChart"></canvas>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                <canvas id="genderChart" width="400" height="200"></canvas>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>성별 분포</h5>
+                </div>
+                <div class="card-body">
+                    <div style="height: 400px;">
+                        <canvas id="genderChart"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -94,9 +100,19 @@ const artworkCountChart = new Chart(artworkCountCtx, {
     },
     options: {
         responsive: true,
+        maintainAspectRatio: false,
         scales: {
             y: {
-                beginAtZero: true
+                beginAtZero: true,
+                ticks: {
+                    stepSize: 1
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                display: true,
+                position: 'top'
             }
         }
     }
@@ -104,31 +120,59 @@ const artworkCountChart = new Chart(artworkCountCtx, {
 
 // 성별 분포 차트
 const genderCtx = document.getElementById('genderChart').getContext('2d');
-const maleCount = {{ artists|length }} - {{ artists|length }};  // 실제 계산 필요
-const femaleCount = {{ artists|length }};  // 실제 계산 필요
+
+// 성별 데이터 계산
+let maleCount = 0;
+let femaleCount = 0;
+
+{% for artist in artists %}
+    {% if artist.gender == '남자' %}
+        maleCount++;
+    {% elif artist.gender == '여자' %}
+        femaleCount++;
+    {% endif %}
+{% endfor %}
 
 const genderChart = new Chart(genderCtx, {
     type: 'doughnut',
     data: {
         labels: ['남자', '여자'],
         datasets: [{
-            data: [
-                {% for artist in artists %}{% if artist.gender == '남자' %}1{% else %}0{% endif %}{% if not forloop.last %}+{% endif %}{% endfor %},
-                {% for artist in artists %}{% if artist.gender == '여자' %}1{% else %}0{% endif %}{% if not forloop.last %}+{% endif %}{% endfor %}
-            ],
+            data: [maleCount, femaleCount],
             backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)'
+                'rgba(54, 162, 235, 0.8)',
+                'rgba(255, 99, 132, 0.8)'
             ],
             borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)'
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 99, 132, 1)'
             ],
-            borderWidth: 1
+            borderWidth: 2
         }]
     },
     options: {
-        responsive: true
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: {
+                    padding: 20,
+                    usePointStyle: true
+                }
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        const label = context.label || '';
+                        const value = context.parsed;
+                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                        const percentage = ((value / total) * 100).toFixed(1);
+                        return `${label}: ${value}명 (${percentage}%)`;
+                    }
+                }
+            }
+        }
     }
 });
 </script>
