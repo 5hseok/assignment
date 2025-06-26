@@ -54,3 +54,19 @@ Thumbs.db
 # Secret keys
 .env
 *.key
+
+# Coverage
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.tox/
+.pytest_cache/
+
+# Coverage
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.tox/
+.pytest_cache/
