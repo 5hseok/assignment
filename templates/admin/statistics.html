@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load humanize %}
+
 {% block title %}작가 통계 - 오픈갤러리{% endblock %}
 
 {% block content %}
@@ -33,7 +35,7 @@
                                 <td>{{ artist.artwork_set.count }}개</td>
                                 <td>
                                     {% if artist.avg_price %}
-                                        ₩{{ artist.avg_price|floatformat:0|add:"0"|stringformat:"d" }}
+                                        ₩{{ artist.avg_price|floatformat:0|intcomma }}
                                     {% else %}
                                         -
                                     {% endif %}

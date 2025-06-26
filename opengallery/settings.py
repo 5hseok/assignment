@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'artworks.apps.ArtworksConfig',
     'exhibitions.apps.ExhibitionsConfig',
     'auth_management.apps.AuthManagementConfig', 
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [
