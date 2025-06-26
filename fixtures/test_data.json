@@ -1,0 +1,237 @@
+[
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$test$hash",
+    "last_login": null,
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "admin@opengallery.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2024-01-01T00:00:00Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$test$hash",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "artist1",
+    "first_name": "",
+    "last_name": "",
+    "email": "artist1@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2024-01-02T00:00:00Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$test$hash",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "artist2",
+    "first_name": "",
+    "last_name": "",
+    "email": "artist2@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2024-01-03T00:00:00Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$test$hash",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "customer1",
+    "first_name": "",
+    "last_name": "",
+    "email": "customer1@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2024-01-04T00:00:00Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "artists.artist",
+  "pk": 1,
+  "fields": {
+    "user": 2,
+    "name": "김작가",
+    "gender": "남자",
+    "birthday": "1985-03-15",
+    "email": "kim.artist@example.com",
+    "phone_number": "010-1234-5678",
+    "created_at": "2024-01-02T10:00:00Z",
+    "updated_at": "2024-01-02T10:00:00Z"
+  }
+},
+{
+  "model": "artists.artist",
+  "pk": 2,
+  "fields": {
+    "user": 3,
+    "name": "박작가",
+    "gender": "여자",
+    "birthday": "1990-07-22",
+    "email": "park.artist@example.com",
+    "phone_number": "010-9876-5432",
+    "created_at": "2024-01-03T10:00:00Z",
+    "updated_at": "2024-01-03T10:00:00Z"
+  }
+},
+{
+  "model": "artists.artistapplication",
+  "pk": 1,
+  "fields": {
+    "user": 4,
+    "name": "신청자",
+    "gender": "남자",
+    "birthday": "1988-12-10",
+    "email": "applicant@example.com",
+    "phone_number": "010-5555-6666",
+    "status": "pending",
+    "applied_at": "2024-01-04T14:30:00Z",
+    "processed_at": null
+  }
+},
+{
+  "model": "artworks.artwork",
+  "pk": 1,
+  "fields": {
+    "artist": 1,
+    "title": "추상화 시리즈 1",
+    "price": 3000000,
+    "size_number": 50,
+    "created_at": "2024-01-05T11:00:00Z",
+    "updated_at": "2024-01-05T11:00:00Z"
+  }
+},
+{
+  "model": "artworks.artwork",
+  "pk": 2,
+  "fields": {
+    "artist": 1,
+    "title": "추상화 시리즈 2",
+    "price": 4500000,
+    "size_number": 80,
+    "created_at": "2024-01-06T11:00:00Z",
+    "updated_at": "2024-01-06T11:00:00Z"
+  }
+},
+{
+  "model": "artworks.artwork",
+  "pk": 3,
+  "fields": {
+    "artist": 1,
+    "title": "대형 작품",
+    "price": 10000000,
+    "size_number": 200,
+    "created_at": "2024-01-07T11:00:00Z",
+    "updated_at": "2024-01-07T11:00:00Z"
+  }
+},
+{
+  "model": "artworks.artwork",
+  "pk": 4,
+  "fields": {
+    "artist": 2,
+    "title": "정물화 1",
+    "price": 2000000,
+    "size_number": 30,
+    "created_at": "2024-01-08T11:00:00Z",
+    "updated_at": "2024-01-08T11:00:00Z"
+  }
+},
+{
+  "model": "artworks.artwork",
+  "pk": 5,
+  "fields": {
+    "artist": 2,
+    "title": "정물화 2",
+    "price": 2500000,
+    "size_number": 40,
+    "created_at": "2024-01-09T11:00:00Z",
+    "updated_at": "2024-01-09T11:00:00Z"
+  }
+},
+{
+  "model": "exhibitions.exhibition",
+  "pk": 1,
+  "fields": {
+    "artist": 1,
+    "title": "김작가 개인전 - 추상의 세계",
+    "start_date": "2024-02-01",
+    "end_date": "2024-02-28",
+    "created_at": "2024-01-10T12:00:00Z",
+    "updated_at": "2024-01-10T12:00:00Z"
+  }
+},
+{
+  "model": "exhibitions.exhibition",
+  "pk": 2,
+  "fields": {
+    "artist": 2,
+    "title": "박작가 정물화전",
+    "start_date": "2024-03-01",
+    "end_date": "2024-03-31",
+    "created_at": "2024-01-11T12:00:00Z",
+    "updated_at": "2024-01-11T12:00:00Z"
+  }
+},
+{
+  "model": "exhibitions.exhibitionartwork",
+  "pk": 1,
+  "fields": {
+    "exhibition": 1,
+    "artwork": 1,
+    "added_at": "2024-01-10T12:00:00Z"
+  }
+},
+{
+  "model": "exhibitions.exhibitionartwork",
+  "pk": 2,
+  "fields": {
+    "exhibition": 1,
+    "artwork": 2,
+    "added_at": "2024-01-10T12:00:00Z"
+  }
+},
+{
+  "model": "exhibitions.exhibitionartwork",
+  "pk": 3,
+  "fields": {
+    "exhibition": 2,
+    "artwork": 4,
+    "added_at": "2024-01-11T12:00:00Z"
+  }
+},
+{
+  "model": "exhibitions.exhibitionartwork",
+  "pk": 4,
+  "fields": {
+    "exhibition": 2,
+    "artwork": 5,
+    "added_at": "2024-01-11T12:00:00Z"
+  }
+}
+]
